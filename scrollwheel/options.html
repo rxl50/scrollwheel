@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScrollCircle Options</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: #f8f9fa;
+            color: #202124;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #4285f4;
+            margin-right: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .icon::after {
+            content: '';
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: white;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 300;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin: 0 0 16px 0;
+            color: #1a73e8;
+        }
+        
+        .setting-group {
+            margin-bottom: 24px;
+        }
+        
+        .setting-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding: 12px 0;
+        }
+        
+        .setting-info {
+            flex: 1;
+        }
+        
+        .setting-label {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        
+        .setting-description {
+            font-size: 14px;
+            color: #5f6368;
+            line-height: 1.4;
+        }
+        
+        .setting-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 200px;
+            justify-content: flex-end;
+        }
+        
+        .slider {
+            width: 120px;
+            height: 6px;
+            border-radius: 3px;
+            background: #e0e0e0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #4285f4;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #4285f4;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .value-display {
+            font-weight: 500;
+            min-width: 50px;
+            text-align: right;
+            color: #1a73e8;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .checkbox {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #dadce0;
+            border-radius: 4px;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .checkbox input {
+            opacity: 0;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            cursor: pointer;
+        }
+        
+        .checkbox input:checked + .checkmark {
+            background: #4285f4;
+            border-color: #4285f4;
+        }
+        
+        .checkbox input:checked + .checkmark::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+            position: absolute;
+            top: -1px;
+            left: 2px;
+        }
+        
+        .checkmark {
+            width: 100%;
+            height: 100%;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .reset-section {
+            text-align: center;
+            padding: 24px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .btn {
+            background: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .btn:hover {
+            background: #3367d6;
+        }
+        
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #5f6368;
+            border: 1px solid #dadce0;
+        }
+        
+        .btn-secondary:hover {
+            background: #e8eaed;
+        }
+        
+        .save-status {
+            margin-top: 16px;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 14px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .save-status.success {
+            background: #e6f4ea;
+            color: #137333;
+            border: 1px solid #ceead6;
+        }
+        
+        .save-status.show {
+            opacity: 1;
+        }
+        
+        .preview-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 150px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .preview-circle {
+            border: 3px solid #4285f4;
+            border-radius: 50%;
+            background: rgba(66, 133, 244, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .preview-dot {
+            width: 8px;
+            height: 8px;
+            background: #1a73e8;
+            border-radius: 50%;
+        }
+        
+        .keyboard-shortcuts {
+            background: #f8f9fa;
+            border-radius: 4px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+        
+        .shortcut {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .shortcut:last-child {
+            margin-bottom: 0;
+        }
+        
+        .key-combo {
+            font-family: monospace;
+            background: rgba(0,0,0,0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="icon"></div>
+            <h1>ScrollCircle Options</h1>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">Circle Appearance</h2>
+            
+            <div class="setting-group">
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-label">Circle Size</div>
+                        <div class="setting-description">Diameter of the scroll circle in pixels</div>
+                    </div>
+                    <div class="setting-control">
+                        <input type="range" id="sizeSlider" class="slider" min="60" max="200" step="10" value="100">
+                        <span class="value-display" id="sizeValue">100px</span>
+                    </div>
+                </div>
+                
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-label">Opacity</div>
+                        <div class="setting-description">Transparency level of the circle background</div>
+                    </div>
+                    <div class="setting-control">
+                        <input type="range" id="opacitySlider" class="slider" min="0.1" max="1" step="0.1" value="0.7">
+                        <span class="value-display" id="opacityValue">70%</span>
+                    </div>
+                </div>
+                
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-label">High Contrast Mode</div>
+                        <div class="setting-description">Use high contrast colors for better visibility</div>
+                    </div>
+                    <div class="setting-control">
+                        <div class="checkbox-group">
+                            <div class="checkbox">
+                                <input type="checkbox" id="highContrast">
+                                <div class="checkmark"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="preview-section">
+                <div class="preview-circle" id="previewCircle">
+                    <div class="preview-dot"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">Scrolling Behavior</h2>
+            
+            <div class="setting-group">
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-label">Scroll Speed Multiplier</div>
+                        <div class="setting-description">Controls how fast the page scrolls relative to mouse distance from center</div>
+                    </div>
+                    <div class="setting-control">
+                        <input type="range" id="speedSlider" class="slider" min="0.1" max="5" step="0.1" value="1">
+                        <span class="value-display" id="speedValue">1.0x</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">Keyboard Shortcuts</h2>
+            
+            <div class="keyboard-shortcuts">
+                <div class="shortcut">
+                    <span>Toggle ScrollCircle</span>
+                    <span class="key-combo">Ctrl+Shift+S</span>
+                </div>
+                <div class="shortcut">
+                    <span>Move circle (when focused)</span>
+                    <span class="key-combo">Arrow Keys</span>
+                </div>
+                <div class="shortcut">
+                    <span>Close circle</span>
+                    <span class="key-combo">Escape</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="reset-section">
+                <button id="resetBtn" class="btn btn-secondary">Reset to Defaults</button>
+                <div class="save-status" id="saveStatus">Settings saved successfully!</div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="options.js"></script>
+</body>
+</html>

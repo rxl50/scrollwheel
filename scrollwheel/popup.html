@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScrollCircle</title>
+    <style>
+        body {
+            width: 300px;
+            padding: 16px;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 14px;
+            line-height: 1.4;
+            background: #f8f9fa;
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #4285f4;
+            margin-right: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .icon::after {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: white;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 500;
+            color: #202124;
+        }
+        
+        .toggle-section {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        
+        .toggle-btn {
+            background: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            min-width: 120px;
+        }
+        
+        .toggle-btn:hover {
+            background: #3367d6;
+        }
+        
+        .toggle-btn.active {
+            background: #34a853;
+        }
+        
+        .toggle-btn.active:hover {
+            background: #2d8a47;
+        }
+        
+        .status {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #5f6368;
+        }
+        
+        .quick-settings {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .setting-row:last-child {
+            margin-bottom: 0;
+        }
+        
+        .setting-label {
+            font-size: 12px;
+            color: #5f6368;
+            flex: 1;
+        }
+        
+        .setting-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .slider {
+            width: 80px;
+            height: 4px;
+            border-radius: 2px;
+            background: #e0e0e0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #4285f4;
+            cursor: pointer;
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #4285f4;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .value-display {
+            font-size: 11px;
+            color: #5f6368;
+            min-width: 30px;
+            text-align: right;
+        }
+        
+        .links {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .link {
+            color: #4285f4;
+            text-decoration: none;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .link:hover {
+            text-decoration: underline;
+        }
+        
+        .instructions {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 4px;
+            padding: 8px;
+            margin-bottom: 12px;
+            font-size: 11px;
+            color: #856404;
+        }
+        
+        .keyboard-shortcut {
+            font-family: monospace;
+            background: rgba(0,0,0,0.1);
+            padding: 2px 4px;
+            border-radius: 2px;
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="icon"></div>
+        <h1>ScrollCircle</h1>
+    </div>
+    
+    <div class="instructions">
+        <strong>How to use:</strong> Click toggle to show circle. Drag to position. Move mouse inside circle to scroll.
+        <br><br>
+        <strong>Shortcut:</strong> <span class="keyboard-shortcut">Ctrl+Shift+S</span> (or <span class="keyboard-shortcut">Cmd+Shift+S</span> on Mac)
+    </div>
+    
+    <div class="toggle-section">
+        <button id="toggleBtn" class="toggle-btn">Enable ScrollCircle</button>
+        <div class="status" id="status">Click to activate on this page</div>
+    </div>
+    
+    <div class="quick-settings">
+        <div class="setting-row">
+            <span class="setting-label">Speed</span>
+            <div class="setting-control">
+                <input type="range" id="speedSlider" class="slider" min="0.1" max="3" step="0.1" value="1">
+                <span class="value-display" id="speedValue">1.0x</span>
+            </div>
+        </div>
+        
+        <div class="setting-row">
+            <span class="setting-label">Size</span>
+            <div class="setting-control">
+                <input type="range" id="sizeSlider" class="slider" min="60" max="200" step="10" value="100">
+                <span class="value-display" id="sizeValue">100px</span>
+            </div>
+        </div>
+        
+        <div class="setting-row">
+            <span class="setting-label">Opacity</span>
+            <div class="setting-control">
+                <input type="range" id="opacitySlider" class="slider" min="0.1" max="1" step="0.1" value="0.7">
+                <span class="value-display" id="opacityValue">70%</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="links">
+        <a href="#" class="link" id="optionsLink">More Options</a>
+        <a href="#" class="link" id="helpLink">Help & Support</a>
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html>
